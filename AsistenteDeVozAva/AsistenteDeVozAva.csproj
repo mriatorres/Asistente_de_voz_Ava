@@ -84,5 +84,11 @@
   <ItemGroup>
     <None Include="Resources\ToroLeaf.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="DefaultCommands.txt" />
+    <None Include="Resources\pixel-speech-bubble.gif" />
+    <None Include="Resources\Cursor.png" />
+    <None Include="Resources\WeChat.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
