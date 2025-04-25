@@ -28,15 +28,28 @@ namespace AsistenteDeVozAva
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            _recognizer.SetInputToDefaultAudioDevice();
-            _recognizer.LoadGrammarAsync(new Grammar(new GrammarBuilder(new Choices(File.ReadAllLines(@"DefaultCommands.txt")))));
-            _recognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(Default_SpeechRecognized);
-            _recognizer.SpeechDetected += new EventHandler<SpeechDetectedEventArgs>(_recognizer_SpeechRecognized);
-            _recognizer.RecognizeAsync(RecognizeMode.Multiple);
+            try
+            {
+                _recognizer.SetInputToDefaultAudioDevice();
+                _recognizer.LoadGrammarAsync(new Grammar(new GrammarBuilder(new Choices(File.ReadAllLines(@"DefaultCommands.txt")))));
+                _recognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(Default_SpeechRecognized);
+                _recognizer.SpeechDetected += new EventHandler<SpeechDetectedEventArgs>(_recognizer_SpeechRecognized);
+                _recognizer.RecognizeAsync(RecognizeMode.Multiple);
 
-            startlistening.SetInputToDefaultAudioDevice();
-            startlistening.LoadGrammarAsync(new Grammar(new GrammarBuilder(new Choices(File.ReadAllLines(@"DefaultCommands.txt")))));
-            startlistening.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(startlistening_SpeechRecognized);
+            }
+            catch (PlatformNotSupportedException ex)
+            {
+                MessageBox.Show("El reconocimiento de voz no es compatible con esta plataforma. Por favor, ejecute la aplicación en Windows.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show("No hay ningún reconocedor instalado. Asegúrese de que el reconocimiento de voz esté configurado en su sistema.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Default_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
